@@ -1,0 +1,5 @@
+include_directories(./include)
+add_subdirectory(parse)
+add_subdirectory(tokens)
+add_library(libpack SHARED parse tokens) 
+target_link_libraries(libpack parse tokens)
