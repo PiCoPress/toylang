@@ -1,9 +1,5 @@
 #include <stdlib.h>
 
-#include "ast.h"
-#include "tokens.h"
+#include "ast/ast.h"
+#include "ast/tokens.h"
 
-int tokenize(char *str)
-{
-    
-}

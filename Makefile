@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O2
+CFLAGS = -O2 -Wall -MMD -MP
 LDFLAGS =
 ROOTDIR = $(CURDIR)
 INCLUDE = $(CURDIR)/include

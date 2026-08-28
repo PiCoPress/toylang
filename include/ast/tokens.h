@@ -8,4 +8,12 @@ enum TOKENS {
     TOK_DIV,
 };
 
+struct token_t {
+    enum TOKENS type;
+    union {
+        char *as_str;
+        long as_long;
+    } value;
+};
+
 #endif

@@ -1,9 +1,10 @@
-SRCS = pi.c main.c
+SRCS = main.c parser.c tokenizer.c
 OBJS = $(SRCS:.c=.o)
+DEPS = $(SRCS:.c=.d)
 SUBDIRS =
 TARGET = main
 
-.PHONY: clean
+.PHONY: all main clean
 
 all: $(TARGET)
 
@@ -18,4 +19,6 @@ clean:
 		do $(MAKE) -C $$dir clean; \
 	done
 
-	rm -f $(OBJS) main.o
+	rm -f $(OBJS) $(DEPS) $(TARGET)
+
+-include $(OBJS:.o=.d)
