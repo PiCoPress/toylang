@@ -202,7 +202,7 @@ inline void identify_word_8(struct token_t *tok, char *buffer)
 {
     if(!strncmp("continue", buffer, 8))
     {
-        tok->type = TOK_ST_ELSE;
+        tok->type = TOK_ST_CONT;
         zeroing_unused(tok);
     }
     else

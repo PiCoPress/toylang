@@ -16,7 +16,7 @@ int main()
     for(int i = 0; i < tl.size; ++ i)
     {
         struct token_t *tok = &tl.arr[i];
-        if(tok->is_ptr) printf("%d %s\n", tok->type, (char*)tok->value.ptr);
+        if(tok->is_ptr) printf("%s %s\n", STRING_TOKENS[tok->type], (char*)tok->value.ptr);
         else printf("%s %ld\n", STRING_TOKENS[tok->type], tok->value.num);
     }
 
