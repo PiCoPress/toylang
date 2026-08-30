@@ -6,15 +6,15 @@
 #include "type.h"
 
 struct node_argument {
-    long arg_symbol;
     enum BASE_TYPE type;
+    long arg_symbol;
     int is_ptr;
 };
 
 struct node_function {
     enum BASE_TYPE ret_type;
     int ret_is_ptr;
-    long func_symbol;
+    char *func_symbol;
     struct AST *body; // Allow declare only
 
     int argc;

@@ -11,8 +11,8 @@ enum LITERAL_TYPE {
 };
 
 struct node_literal {
-    enum LITERAL_TYPE lit_type;
     void *value;
+    enum LITERAL_TYPE lit_type;
 };
 
 #endif

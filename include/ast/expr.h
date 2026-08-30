@@ -57,9 +57,9 @@ struct node_expr_binary {
 };
 
 struct node_func_call {
-    long symbol;
-    int argc;
     struct node_expr *args;
+    char *symbol;
+    int argc;
 };
 
 struct node_expr {

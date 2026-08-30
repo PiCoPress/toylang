@@ -10,11 +10,11 @@ enum ALLOC_TYPE {
 };
 
 struct node_def_var {
+    struct node_expr expr;
+    char *symbol;
     enum BASE_TYPE def_type;
     enum ALLOC_TYPE is_const;
     int is_ptr;
-    long symbol;
-    struct node_expr expr;
 };
 
 #endif

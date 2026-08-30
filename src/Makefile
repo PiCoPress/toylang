@@ -1,10 +1,10 @@
-SRCS = main.c parser.c tokenizer.c
+SRCS = const_data.c main.c parser.c tokenizer.c
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
 SUBDIRS =
 TARGET = main
 
-.PHONY: all main clean
+.PHONY: all clean
 
 all: $(TARGET)
 
