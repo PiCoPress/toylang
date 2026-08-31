@@ -1,7 +1,8 @@
 #include <stdio.h>
 
-#include "tokenizer.h"
+#include "tokenizers/tokenizer.h"
 #include "ast/ast.h"
+#include "stringtools.h"
 
 int main()
 {
@@ -19,6 +20,8 @@ int main()
         if(tok->is_ptr) printf("%s %s\n", STRING_TOKENS[tok->type], (char*)tok->value.ptr);
         else printf("%s %ld\n", STRING_TOKENS[tok->type], tok->value.num);
     }
+    int h = 129;
+    printf("%d: %d %d %d\n", h, get_ceil_bit(h), get_ceil_bit_fast(h), get_ceil_bit_hw_accel(h));
 
     delete_token_list(&tl);
     return 0;

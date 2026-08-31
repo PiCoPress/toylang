@@ -1,4 +1,4 @@
-#ifndef __FUNCITON_H
+#ifndef __FUNCTION_H
 #define __FUNCTION_H
 
 #include "ast.h"

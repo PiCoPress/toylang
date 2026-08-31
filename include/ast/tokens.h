@@ -42,8 +42,8 @@ enum TOKENS {
     TOK_ST_BREAK,
     TOK_ST_RET,
 
-    TOK_PAR_OPEN, // Parentheses
-    TOK_PAR_CLOSE,
+    TOK_PAR_OPEN,   // Parentheses (
+    TOK_PAR_CLOSE,  //             )
 
     TOK_DEF_VAR,
     TOK_DEF_FUNC,

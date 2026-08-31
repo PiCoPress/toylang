@@ -1,17 +1,15 @@
-SRCS = const_data.c main.c parser.c tokenizer.c stringtools.c
+SRCS = words.c
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
-SUBDIRS = tokenizers
+SUBDIRS =
 SUBDIR_ARC = $(addsuffix /$(ARCHIVE_NAME),$(SUBDIRS))
 
 .PHONY: $(SUBDIRS) all clean
 
-all: ../$(EXECUTABLE)
+all: $(SUBDIRS) $(ARCHIVE_NAME)
 
-../$(EXECUTABLE): $(SUBDIR_ARC) $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -I$(INCLUDE) -o ../$(EXECUTABLE) $(OBJS) $(SUBDIR_ARC)
-
-$(SUBDIR_ARC): $(SUBDIRS)
+$(ARCHIVE_NAME): $(SUBDIRS) $(OBJS)
+	$(AR) rcs $(ARCHIVE_NAME) $(OBJS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@
@@ -24,6 +22,6 @@ clean:
 		do $(MAKE) -C $$dir clean; \
 	done
 
-	rm -f $(OBJS) $(DEPS)
+	rm -f $(OBJS) $(DEPS) $(ARCHIVE_NAME)
 
 -include $(OBJS:.o=.d)

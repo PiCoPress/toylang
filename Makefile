@@ -1,18 +1,19 @@
 CC = gcc
+AR = ar
 CFLAGS = -O2 -Wall -MMD -MP
 LDFLAGS =
 ROOTDIR = $(CURDIR)
 INCLUDE = $(CURDIR)/include
-OUT = toylang
+EXECUTABLE = toylang
+ARCHIVE_NAME = archive.a
 
-export CC CFLAGS LDFLAGS INCLUDE ROOTDIR
+export CC AR CFLAGS LDFLAGS INCLUDE ROOTDIR ARCHIVE_NAME EXECUTABLE
 
 all: main
 
 main:
 	$(MAKE) -C ./src
-	cp ./src/main $(OUT)
 
 clean:
 	$(MAKE) -C ./src clean 
-	rm -f $(OUT)
+	rm -f $(EXECUTABLE)
