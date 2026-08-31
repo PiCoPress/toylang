@@ -18,9 +18,9 @@ void append_string(struct string *dest, const char *src, int src_len);
 void edit_char(struct string *str, int idx, char c);
 void adjust_mult(struct string *str, int size);
 
-unsigned int get_ceil_bit(int x);
-unsigned int get_floor_bit_fast(int x);
-unsigned int get_ceil_bit_fast(int x);
-unsigned int get_ceil_bit_hw_accel(int x);
+unsigned int get_bit_ceil(int x);
+unsigned int get_bit_floor_bs(int x);
+unsigned int get_bit_ceil_bs(int x);
+unsigned int get_bit_ceil_fast(int x);
 
 #endif

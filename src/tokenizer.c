@@ -94,16 +94,16 @@ int tokenizer(struct st_token_list *obj, char *source)
                 break;
             }
 
-            case DECIMAL:
-                destroy_string(&buffer);
-                return -1;
+            case DECIMAL: goto err;
             case BLANK: ++ cursor; break;
-            case SPECIAL:
-                destroy_string(&buffer);
-                return -1;
+            case SPECIAL: goto err;
         }
     }
 
     destroy_string(&buffer);
     return 0;
+
+err:
+    destroy_string(&buffer);
+    return -1;
 }

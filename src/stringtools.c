@@ -41,20 +41,25 @@ inline void adjust_mult(struct string *str, int src_len)
 {
     int *const mult_ptr = &str->mult;
 
-    if((*mult_ptr + str->capacity) < str->length + src_len) *mult_ptr = get_ceil_bit(src_len);
-    if(*mult_ptr < 512) *mult_ptr *= 2;
-    if(*mult_ptr > 512) *mult_ptr = 512;
+    if((*mult_ptr + str->capacity) < str->length + src_len)
+        *mult_ptr = get_bit_ceil_fast(src_len);
+    else
+    {
+        if(*mult_ptr < 512) *mult_ptr *= 2;
+        if(*mult_ptr > 512) *mult_ptr = 512;
+    }
 }
 
-inline unsigned int get_ceil_bit(int x)
+inline unsigned int get_bit_ceil(int x)
 {
     unsigned int mul = 1;
     while(mul < x) mul <<= 1;
     return mul;
 }
 
-// maybe fast...?
-inline unsigned int get_floor_bit_fast(int x)
+/*  Uses binary search
+ */
+inline unsigned int get_bit_floor_bs(int x)
 {
     unsigned int sum = 1;
     int mul = sizeof(int) * 8 / 2, x1;
@@ -73,13 +78,13 @@ inline unsigned int get_floor_bit_fast(int x)
     return sum;
 }
 
-inline unsigned int get_ceil_bit_fast(int x)
+inline unsigned int get_bit_ceil_bs(int x)
 {
-    unsigned int r = get_floor_bit_fast(x);
+    unsigned int r = get_bit_floor_bs(x);
     return (x != r)? (r << 1): x;
 }
 
-inline unsigned int get_ceil_bit_hw_accel(int x)
+inline unsigned int get_bit_ceil_fast(int x)
 {
     -- x;
     return x? 1U << (32 - __builtin_clz(x)): 1U;

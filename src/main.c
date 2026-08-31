@@ -21,7 +21,7 @@ int main()
         else printf("%s %ld\n", STRING_TOKENS[tok->type], tok->value.num);
     }
     int h = 129;
-    printf("%d: %d %d %d\n", h, get_ceil_bit(h), get_ceil_bit_fast(h), get_ceil_bit_hw_accel(h));
+    printf("%d: %d %d %d\n", h, get_bit_ceil(h), get_bit_ceil_bs(h), get_bit_ceil_fast(h));
 
     delete_token_list(&tl);
     return 0;
