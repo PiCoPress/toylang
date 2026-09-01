@@ -8,7 +8,7 @@
 int main()
 {
     struct st_token_list tl;
-    char *src = "kds2 if def iififif ddee dksla 88 asd djsjkdj 1.2 for while do";
+    char *src = "kds2 if def iififif 120_89_3_4 ddee dksla 88 asd 1. djsjkdj 1.2 for while do 3_22.4322_43";
     int x;
 
     init_token_list(&tl);

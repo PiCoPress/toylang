@@ -101,14 +101,16 @@ int tokenizer(struct st_token_list *obj, char *source, int source_len)
             }
 
             case DECIMAL:
+            {
                 int res = collect_number(&tok, &buffer, &cursor, source_end);
                 if(res < 0)
                 {
-                    err_code = -3;
+                    err_code = res;
                     goto err;
                 }
                 push_token_list(obj, &tok);
                 break;
+            }
 
             case BLANK: ++ cursor; break;
 
@@ -126,9 +128,9 @@ err:
     return err_code;
 }
 
-int lookahead(char *source, int source_len, int idx, int num)
+int lookahead(char *cursor, char *source_end, int num)
 {
     // Guard OOB
-    if(idx + num >= source_len) return 256;
-    return source[idx + num];
+    if(cursor + num >= source_end) return 256;
+    return cursor[num];
 }

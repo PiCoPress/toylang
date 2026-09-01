@@ -32,16 +32,16 @@ int collect_number(struct token_t *tok, struct string *str, char **cursor_ptr,
 {
     // mode 0: int      mode 1: non-int
     int number_mode = 0, should_break = 0;
-    char prev_char = 0, aa_cursor = **cursor_ptr;
-    // aa_cursor: 'a'sterisk 'a'sterisk cursor_ptr
+    char prev_char = 0, current_cur_v;
+    // current_cur_v: 'a'sterisk 'a'sterisk cursor_ptr
 
     reset_string(str);
     while(1)
     {
         if(*cursor_ptr >= source_end) break;
-        aa_cursor = **cursor_ptr;
+        current_cur_v = **cursor_ptr;
 
-        switch(get_char_type(aa_cursor))
+        switch(get_char_type(current_cur_v))
         {
             case DECIMAL:
                 collect_decimal(str, cursor_ptr, source_end);
@@ -52,11 +52,13 @@ int collect_number(struct token_t *tok, struct string *str, char **cursor_ptr,
                 // Alphabets or underscores in the decimal context?
                 // I will allow underscores, like Python (1_000).
                 // But not allow continuous underscores.
-                if(aa_cursor == '_')
+                if(current_cur_v == '_')
                 {
                     // It's better to use enum based error, but not for now?
-                    if(prev_char == '_') return -2;
+                    // __, ._
+                    if(prev_char == '_' || prev_char == '.') return -2;
                     // Ignore a single underscore
+                    ++ *cursor_ptr;
                 }
                 else // alphabets here
                 {
@@ -70,19 +72,27 @@ int collect_number(struct token_t *tok, struct string *str, char **cursor_ptr,
 
             case SPECIAL: // Accepts only a dot
             {
-                if(aa_cursor == '.')
+                if(current_cur_v == '.')
                 {
-                    // Like a ".."
-                    // So I should get the cursor back one step.
-                    if(prev_char == '.')
+                    int test = lookahead(*cursor_ptr, source_end, 1);
+
+                    // Like a "1.2.3", "1.23232..", "1_.".
+                    // But float with range? Maybe no.
+                    if(number_mode == 1 || prev_char == '_') return -4;
+
+                    if(test == 256) // EOF but float
                     {
-                        -- *cursor_ptr;
-                        -- str->length;
-                        return 0;
+                        should_break = 1;
+                        number_mode = 1;
+                        break;
                     }
 
-                    // Like a "1.2.3"
-                    if(number_mode == 1) return -4;
+                    // Like a ".."
+                    if(test == '.')
+                    {
+                        should_break = 1;
+                        break;
+                    }
 
                     number_mode = 1;
                     ++ *cursor_ptr;
@@ -93,14 +103,16 @@ int collect_number(struct token_t *tok, struct string *str, char **cursor_ptr,
                 break;
             }
 
-            case BLANK: // Blanks? This means literal number is explicitly ended.
+            case BLANK: // Blanks: This means literal number is explicitly ended.
                 should_break = 1;
                 break;
         }
 
         if(should_break == 1) break;
-        prev_char = aa_cursor;
+        prev_char = *(*cursor_ptr - 1);
     }
+
+    
 
     generate_number(tok, str, number_mode);
     return 0;

@@ -20,6 +20,8 @@ void edit_char(struct string *str, int idx, char c);
 void adjust_mult(struct string *str, int str_pos, int size);
 void reset_string(struct string *str);
 
+int get_last_char(struct string *str);
+
 unsigned int get_bit_ceil(int x);
 unsigned int get_bit_floor_bs(int x);
 unsigned int get_bit_ceil_bs(int x);

@@ -60,6 +60,11 @@ inline void adjust_mult(struct string *str, int str_pos, int src_len)
     }
 }
 
+inline int get_last_char(struct string *str)
+{
+    return str->str[str->length - 1];
+}
+
 inline unsigned int get_bit_ceil(int x)
 {
     unsigned int mul = 1;

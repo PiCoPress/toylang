@@ -27,6 +27,6 @@ int push_token_list(struct st_token_list *obj, struct token_t *new_tok);
 int tokenizer(struct st_token_list *obj, char *source, int source_len);
 
 // return a char [idx + num]
-int lookahead(char *source, int source_len, int idx, int num);
+int lookahead(char *cursor, char *source_end, int num);
 
 #endif
