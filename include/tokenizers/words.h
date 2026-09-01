@@ -9,7 +9,7 @@
  *
  *  Returns word length if success, else returns negative number
  */
-int collect_word(struct string *str, char **cursor_ptr);
+int collect_word(struct string *str, char **cursor_ptr, char *const source_end);
 
 void zeroing_unused(struct token_t *tok);
 void identify_word_as_symbol(struct token_t *tok, struct string *buffer, int buf_len);

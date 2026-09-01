@@ -62,6 +62,7 @@ struct token_t {
         void *ptr;
         long num;
     } value;
+    int tag; // For additional data
     short is_dyn_alloc;
     short is_ptr;
 };

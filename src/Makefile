@@ -6,12 +6,10 @@ SUBDIR_ARC = $(addsuffix /$(ARCHIVE_NAME),$(SUBDIRS))
 
 .PHONY: $(SUBDIRS) all clean
 
-all: ../$(EXECUTABLE)
+all: $(SUBDIRS) ../$(EXECUTABLE)
 
 ../$(EXECUTABLE): $(SUBDIR_ARC) $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -I$(INCLUDE) -o ../$(EXECUTABLE) $(OBJS) $(SUBDIR_ARC)
-
-$(SUBDIR_ARC): $(SUBDIRS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@

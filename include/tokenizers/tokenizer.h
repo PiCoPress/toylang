@@ -5,7 +5,7 @@
 #include "ast/tokens.h"
 
 enum CHARTYPE {
-    ALPHABET_OR_UNDERBAR = 0,
+    ALPHABET_OR_UNDERSCORE = 0,
     DECIMAL,
     BLANK,
     SPECIAL,
@@ -24,6 +24,9 @@ void init_token_list(struct st_token_list *obj);
 void delete_token_list(struct st_token_list *obj);
 int push_token_list(struct st_token_list *obj, struct token_t *new_tok);
 
-int tokenizer(struct st_token_list *obj, char *source);
+int tokenizer(struct st_token_list *obj, char *source, int source_len);
+
+// return a char [idx + num]
+int lookahead(char *source, int source_len, int idx, int num);
 
 #endif

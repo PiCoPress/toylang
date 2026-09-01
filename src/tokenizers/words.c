@@ -7,16 +7,18 @@
  *
  *  Returns word length if success, else returns negative number
  */
-int collect_word(struct string *buffer, char **cursor_ptr)
+int collect_word(struct string *buffer, char **cursor_ptr, char *const source_end)
 {
-    int idx = 0;
     int stop = 0;
+
+    reset_string(buffer);
     while(1)
     {
+        if(*cursor_ptr >= source_end) break;
         switch(get_char_type(**cursor_ptr))
         {
-            case ALPHABET_OR_UNDERBAR: case DECIMAL:
-                edit_char(buffer, idx, **cursor_ptr);
+            case ALPHABET_OR_UNDERSCORE: case DECIMAL:
+                append_string(buffer, *cursor_ptr, 1);
             break;
 
             default:
@@ -26,11 +28,10 @@ int collect_word(struct string *buffer, char **cursor_ptr)
         if(stop == 1) break;
 
         ++ *cursor_ptr;
-        ++ idx;
     }
     
-    edit_char(buffer, idx, '\0');
-    return idx;
+    edit_char(buffer, buffer->length, '\0');
+    return buffer->length;
 }
 
 inline void zeroing_unused(struct token_t *tok)
@@ -38,6 +39,7 @@ inline void zeroing_unused(struct token_t *tok)
     tok->is_dyn_alloc = 0;
     tok->is_ptr = 0;
     tok->value.num = 0;
+    tok->tag = 0;
 }
 
 inline void identify_word_as_symbol(struct token_t *tok, struct string *buffer, int buf_len)

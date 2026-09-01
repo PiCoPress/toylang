@@ -3,12 +3,15 @@
 
 #include "tokenizers/tokenizer.h"
 #include "tokenizers/words.h"
+#include "tokenizers/numbers.h"
+
 #include "stringtools.h"
+
 
 enum CHARTYPE get_char_type(char c)
 {
     if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
-        return ALPHABET_OR_UNDERBAR;
+        return ALPHABET_OR_UNDERSCORE;
     if(c >= '0' && c <= '9') return DECIMAL;
     if(c == ' ' || c == '\t' || c == '\n') return BLANK;
     else return SPECIAL;
@@ -62,29 +65,32 @@ int push_token_list(struct st_token_list *obj, struct token_t *new_tok)
 }
 
 // This doesn't initialize struct st_token_list obj
-int tokenizer(struct st_token_list *obj, char *source)
+int tokenizer(struct st_token_list *obj, char *source, int source_len)
 {
     struct string buffer;
-    struct token_t tok;
+    struct token_t tok = {0, };
+    char *const source_end = source + source_len;
     char *cursor = source;
 
     int buf_len = 0;
+    int err_code = 0;
 
     create_string(&buffer);
 
     while(1)
     {
-        if(*cursor == '\0') break;
+        // Would be EOF
+        if(cursor >= source_end) break;
 
         switch(get_char_type(*cursor))
         {
-            case ALPHABET_OR_UNDERBAR:
+            case ALPHABET_OR_UNDERSCORE:
             {
-                buf_len = collect_word(&buffer, &cursor);
+                buf_len = collect_word(&buffer, &cursor, source_end);
                 if(buf_len <= 0)
                 {
-                    destroy_string(&buffer);
-                    return -2;
+                    err_code = -2;
+                    goto err;
                 }
 
                 // always buf_len > 0
@@ -94,9 +100,21 @@ int tokenizer(struct st_token_list *obj, char *source)
                 break;
             }
 
-            case DECIMAL: goto err;
+            case DECIMAL:
+                int res = collect_number(&tok, &buffer, &cursor, source_end);
+                if(res < 0)
+                {
+                    err_code = -3;
+                    goto err;
+                }
+                push_token_list(obj, &tok);
+                break;
+
             case BLANK: ++ cursor; break;
-            case SPECIAL: goto err;
+
+            case SPECIAL:
+                err_code = -1;
+                goto err;
         }
     }
 
@@ -105,5 +123,12 @@ int tokenizer(struct st_token_list *obj, char *source)
 
 err:
     destroy_string(&buffer);
-    return -1;
+    return err_code;
+}
+
+int lookahead(char *source, int source_len, int idx, int num)
+{
+    // Guard OOB
+    if(idx + num >= source_len) return 256;
+    return source[idx + num];
 }

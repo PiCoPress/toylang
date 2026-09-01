@@ -22,14 +22,24 @@ void destroy_string(struct string *str)
 
 void append_string(struct string *dest, const char *src, int src_len)
 {
-    if(dest->length + src_len >= dest->capacity)
+    writeat_string(dest, src, src_len, dest->length);
+}
+
+void writeat_string(struct string *dest, const char *src, int src_len, int dest_pos)
+{
+    if(dest_pos + src_len >= dest->capacity)
     {
-        adjust_mult(dest, src_len);
+        adjust_mult(dest, dest_pos, src_len);
         dest->capacity += dest->mult;
         dest->str = (char*)realloc(dest->str, dest->capacity);
     }
-    strncpy(dest->str + dest->length, src, src_len);
-    dest->length += src_len;
+    strncpy(dest->str + dest_pos, src, src_len);
+    dest->length = dest_pos + src_len;
+}
+
+void reset_string(struct string *str)
+{
+    str->length = 0;
 }
 
 inline void edit_char(struct string *str, int idx, char c)
@@ -37,11 +47,11 @@ inline void edit_char(struct string *str, int idx, char c)
     str->str[idx] = c;
 }
 
-inline void adjust_mult(struct string *str, int src_len)
+inline void adjust_mult(struct string *str, int str_pos, int src_len)
 {
     int *const mult_ptr = &str->mult;
 
-    if((*mult_ptr + str->capacity) < str->length + src_len)
+    if((*mult_ptr + str->capacity) < str_pos + src_len)
         *mult_ptr = get_bit_ceil_fast(src_len);
     else
     {

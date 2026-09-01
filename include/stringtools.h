@@ -14,9 +14,11 @@ void create_string(struct string *str);
 void destroy_string(struct string *str);
 
 void append_string(struct string *dest, const char *src, int src_len);
+void writeat_string(struct string *dest, const char *src, int src_len, int dest_pos);
 
 void edit_char(struct string *str, int idx, char c);
-void adjust_mult(struct string *str, int size);
+void adjust_mult(struct string *str, int str_pos, int size);
+void reset_string(struct string *str);
 
 unsigned int get_bit_ceil(int x);
 unsigned int get_bit_floor_bs(int x);
