@@ -47,6 +47,7 @@ inline void identify_word_as_symbol(struct token_t *tok, struct string *buffer, 
     tok->type = TOK_SYMBOL;
     tok->is_dyn_alloc = 1;
     tok->is_ptr = 1;
+    tok->tag = 0;
     tok->value.ptr = malloc(buf_len + 1);
     memcpy(tok->value.ptr, buffer->str, buf_len + 1);
 }
