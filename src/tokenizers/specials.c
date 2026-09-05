@@ -4,7 +4,7 @@
 #include "tokenizers/specials.h"
 
 #define u8 (unsigned char)
-#define strpaste(x, r) if(!strncmp(x, str, len)) return r;
+#define strpaste(x, r) if(sizeof(x) - 1 == len && !strncmp(x, str, len)) return r;
 
 const struct token_map TOKEN_MAPPER_SPC[256] = {
     ['+'] = {TOK_OPR_ADD, 0},
@@ -142,5 +142,6 @@ int collect_special(struct string *str, char **cursor_ptr, char *const source_en
     }
 
     *cursor_ptr = cursor;
+	if(tok == 0) return -40;
     return tok;
 }
