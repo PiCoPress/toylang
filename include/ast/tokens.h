@@ -2,38 +2,59 @@
 #define __TOKENS_H
 
 enum TOKENS {
+    TOK_UNDEF,          // error
     TOK_LITERAL,
     TOK_SYMBOL,
-    TOK_ASSIGN,
-    TOK_SEMI,
 
     TOK_OPR_ADD,
     TOK_OPR_SUB,
-    TOK_OPR_MUL,
-    TOK_OPR_DIV,
+    TOK_OPR_ASTERISK,
+    TOK_OPR_SLASH,
     TOK_OPR_MOD,
     TOK_OPR_INC,
     TOK_OPR_DEC,
     TOK_OPR_SHL,
     TOK_OPR_SHR,
-    TOK_OPR_AND,
+    TOK_OPR_AMPERSAND,
     TOK_OPR_OR,
     TOK_OPR_XOR,
-    TOK_OPR_NOT,
-    TOK_OPR_GT,
-    TOK_OPR_GE,
-    TOK_OPR_LT,
-    TOK_OPR_LE,
-    TOK_OPR_ADDR,
-    TOK_OPR_DEREF,
-    TOK_LOGIC_AND,
-    TOK_LOGIC_OR,
-    TOK_LOGIC_NOT,
-    TOK_LOGIC_EQ,
-    TOK_LOGIC_NE,
+    TOK_OPR_BIT_NOT,
+    TOK_LOGIC_GT,
+    TOK_LOGIC_GE,
+    TOK_LOGIC_LT,
+    TOK_LOGIC_LE,       //
+    TOK_LOGIC_AND,      // &&
+    TOK_LOGIC_OR,       // ||
+    TOK_LOGIC_NOT,      // !
+    TOK_LOGIC_EQ,       // ==
+    TOK_LOGIC_NE,       // !=
 
-    TOK_ST_BLK_BEGIN,
-    TOK_ST_BLK_END,
+    TOK_ASSIGN,         // =
+    TOK_ASSIGN_ADD,
+    TOK_ASSIGN_SUB,
+    TOK_ASSIGN_MUL,
+    TOK_ASSIGN_DIV,
+    TOK_ASSIGN_MOD,
+    TOK_ASSIGN_OR,
+    TOK_ASSIGN_AND,
+    TOK_ASSIGN_XOR,
+    TOK_ASSIGN_SHL,
+    TOK_ASSIGN_SHR,
+
+    TOK_CH_DOT,         // .
+    TOK_CH_COMMA,       // ,
+    TOK_CH_COLON,       // :
+    TOK_CH_SEMI,        // ;
+    TOK_CH_QMARK,       // ?
+    TOK_CH_QUOTE,       // '
+    TOK_CH_DQUOTE,      // "
+    TOK_CH_BLK_BEGIN,   // {
+    TOK_CH_BLK_END,     // }
+    TOK_CH_BRAC_OPEN,   // [
+    TOK_CH_BRAC_CLOSE,  // ]
+    TOK_CH_PAR_OPEN,    // (
+    TOK_CH_PAR_CLOSE,   // )
+
     TOK_ST_FOR,
     TOK_ST_WHILE,
     TOK_ST_IF,
@@ -41,14 +62,17 @@ enum TOKENS {
     TOK_ST_CONT,
     TOK_ST_BREAK,
     TOK_ST_RET,
-
-    TOK_PAR_OPEN,   // Parentheses (
-    TOK_PAR_CLOSE,  //             )
-
     TOK_DEF_VAR,
     TOK_DEF_FUNC,
 
+    TOK_RESERVED,
+
     TOK_DUMMY_LAST
+};
+
+struct token_map {
+    enum TOKENS type;
+    int single;
 };
 
 extern const char *STRING_TOKENS[TOK_DUMMY_LAST];

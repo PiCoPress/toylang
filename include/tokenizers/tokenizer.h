@@ -19,10 +19,12 @@ struct st_token_list {
 
 enum CHARTYPE get_char_type(char c);
 
-/* Should call delete_token_list after use */
-void init_token_list(struct st_token_list *obj);
-void delete_token_list(struct st_token_list *obj);
-int push_token_list(struct st_token_list *obj, struct token_t *new_tok);
+void token_clear(struct token_t *tok);
+
+/* Should call token_list_delete after use */
+void token_list_init(struct st_token_list *obj);
+void token_list_delete(struct st_token_list *obj);
+int token_list_push(struct st_token_list *obj, struct token_t *new_tok);
 
 int tokenizer(struct st_token_list *obj, char *source, int source_len);
 

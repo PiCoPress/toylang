@@ -4,9 +4,9 @@
 #include "tokenizers/tokenizer.h"
 #include "tokenizers/words.h"
 #include "tokenizers/numbers.h"
+#include "tokenizers/specials.h"
 
 #include "stringtools.h"
-
 
 enum CHARTYPE get_char_type(char c)
 {
@@ -17,14 +17,22 @@ enum CHARTYPE get_char_type(char c)
     else return SPECIAL;
 }
 
-void init_token_list(struct st_token_list *obj)
+void token_clear(struct token_t *tok)
+{
+    tok->is_dyn_alloc = 0;
+    tok->is_ptr = 0;
+    tok->value.num = 0;
+    tok->tag = 0;
+}
+
+void token_list_init(struct st_token_list *obj)
 {
     obj->size = 0;
     obj->capacity =  256;
     obj->arr = (struct token_t*)malloc(256 * sizeof(struct token_t));
 }
 
-void delete_token_list(struct st_token_list *obj)
+void token_list_delete(struct st_token_list *obj)
 {
     if(obj->arr != NULL)
     {
@@ -41,7 +49,7 @@ void delete_token_list(struct st_token_list *obj)
     }
 }
 
-int push_token_list(struct st_token_list *obj, struct token_t *new_tok)
+int token_list_push(struct st_token_list *obj, struct token_t *new_tok)
 {
     int siz = obj->size, cap = obj->capacity;
     struct token_t *arr = obj->arr;
@@ -96,27 +104,43 @@ int tokenizer(struct st_token_list *obj, char *source, int source_len)
                 // always buf_len > 0
                 identify_word(&tok, &buffer, buf_len);
 
-                push_token_list(obj, &tok);
+                token_list_push(obj, &tok);
                 break;
             }
 
             case DECIMAL:
             {
-                int res = collect_number(&tok, &buffer, &cursor, source_end);
-                if(res < 0)
+                int mode = collect_number(&buffer, &cursor, source_end);
+
+                if(mode < 0)
                 {
-                    err_code = res;
+                    err_code = mode;
                     goto err;
                 }
-                push_token_list(obj, &tok);
+
+                generate_number(&tok, &buffer, mode);
+                token_list_push(obj, &tok);
                 break;
             }
 
             case BLANK: ++ cursor; break;
 
             case SPECIAL:
-                err_code = -1;
-                goto err;
+            {
+                int test = collect_special(&buffer, &cursor, source_end);
+                if(test < 0)
+                {
+                    err_code = test;
+                    goto err;
+                }
+
+                token_clear(&tok);
+
+                tok.type = test;
+
+                token_list_push(obj, &tok);
+                break;
+            }
         }
     }
 

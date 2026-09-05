@@ -8,10 +8,13 @@
 int main()
 {
     struct st_token_list tl;
-    char *src = "kds2 if def iififif 120_89_3_4 ddee dksla 88 asd 1. djsjkdj 1.2 for while do 3_22.4322_43";
+    char *src = "kds2 if def iififif 120_89_3_4 ddee dksla \
+    88 asd 1. djsjkdj 1.2 for while do 3_22.4322_43\
+    continue for break func return else let %%%}[%^ +-(()\
+    if.. <= >= <<= << if(asdv_1234ss!=2";
     int x;
 
-    init_token_list(&tl);
+    token_list_init(&tl);
 
     x = tokenizer(&tl, src, strlen(src));
     printf("ret: %d\n", x);
@@ -26,6 +29,6 @@ int main()
     int h = 129;
     printf("%d: %d %d %d\n", h, get_bit_ceil(h), get_bit_ceil_bs(h), get_bit_ceil_fast(h));
 
-    delete_token_list(&tl);
+    token_list_delete(&tl);
     return 0;
 }

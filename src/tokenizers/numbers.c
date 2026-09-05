@@ -4,31 +4,26 @@
 #include "tokenizers/numbers.h"
 
 /*  Do not set str->length directly, because it's a sub-function.
-
-    Will return count of collected decimals.
  */
 int collect_decimal(struct string *str, char **cursor_ptr, char *const source_end)
 {
-    int idx = 0;
-    char c;
+    char *cursor = *cursor_ptr;
     while(1)
     {
-        if(*cursor_ptr >= source_end) break;
-        c = **cursor_ptr;
+        if(cursor >= source_end) break;
 
-        if(c >= '0' && c <= '9')
-            append_string(str, *cursor_ptr, 1); // safer than edit_char
+        if(*cursor >= '0' && *cursor <= '9')
+            ++ cursor;
         else break;
-
-        ++ *cursor_ptr;
-        ++ idx;
     }
-    return idx;
+
+    append_string(str, *cursor_ptr, cursor - *cursor_ptr); // safer than edit_char
+    *cursor_ptr = cursor;
+    return 0;
 }
 
-// I am writing spaghetti code...
-int collect_number(struct token_t *tok, struct string *str, char **cursor_ptr,
-    char *const source_end)
+/* Returns number_mode if succeed, else return err code */
+int collect_number(struct string *str, char **cursor_ptr, char *const source_end)
 {
     // mode 0: int      mode 1: non-int
     int number_mode = 0, should_break = 0;
@@ -112,10 +107,7 @@ int collect_number(struct token_t *tok, struct string *str, char **cursor_ptr,
         prev_char = *(*cursor_ptr - 1);
     }
 
-    
-
-    generate_number(tok, str, number_mode);
-    return 0;
+    return number_mode;
 }
 
 void generate_number(struct token_t *tok, struct string *str, int mode)

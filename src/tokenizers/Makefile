@@ -1,4 +1,4 @@
-SRCS = words.c numbers.c
+SRCS = words.c numbers.c specials.c
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
 SUBDIRS =

@@ -17,6 +17,10 @@ $(SUBDIRS):
 %.o: %.c
 	$(CC) $(CFLAGS) -I$(INCLUDE) -c -o $@ $<
 
+const_data.o: ../include/ast/tokens.h
+	../scripts/gen_const_data.sh $< const_data.c
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c -o $@ const_data.c
+
 clean:
 	@for dir in $(SUBDIRS); \
 		do $(MAKE) -C $$dir clean; \

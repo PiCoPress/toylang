@@ -9,37 +9,34 @@
  */
 int collect_word(struct string *buffer, char **cursor_ptr, char *const source_end)
 {
+    char *cursor = *cursor_ptr;
+    int len = 0;
     int stop = 0;
 
     reset_string(buffer);
     while(1)
     {
-        if(*cursor_ptr >= source_end) break;
-        switch(get_char_type(**cursor_ptr))
+        if(cursor >= source_end) break;
+        switch(get_char_type(*cursor))
         {
             case ALPHABET_OR_UNDERSCORE: case DECIMAL:
-                append_string(buffer, *cursor_ptr, 1);
-            break;
+                ++ cursor;
+                break;
 
             default:
                 stop = 1;
                 break;
         }
         if(stop == 1) break;
-
-        ++ *cursor_ptr;
     }
-    
-    edit_char(buffer, buffer->length, '\0');
-    return buffer->length;
-}
 
-inline void zeroing_unused(struct token_t *tok)
-{
-    tok->is_dyn_alloc = 0;
-    tok->is_ptr = 0;
-    tok->value.num = 0;
-    tok->tag = 0;
+    len = cursor - *cursor_ptr;
+
+    append_string(buffer, *cursor_ptr, len);
+    append_string(buffer, "", 1);
+
+    *cursor_ptr = cursor;
+    return buffer->length - 1;
 }
 
 inline void identify_word_as_symbol(struct token_t *tok, struct string *buffer, int buf_len)
@@ -62,7 +59,7 @@ inline void identify_word_2(struct token_t *tok, struct string *buffer)
     if(!strncmp("if", buffer->str, 2))
     {
         tok->type = TOK_ST_IF;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else // seems to be a symbol
         identify_word_as_symbol(tok, buffer, 2);
@@ -73,12 +70,12 @@ inline void identify_word_3(struct token_t *tok, struct string *buffer)
     if(!strncmp("for", buffer->str, 3))
     {
         tok->type = TOK_ST_FOR;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else if(!strncmp("let", buffer->str, 3))
     {
         tok->type = TOK_DEF_VAR;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else
         identify_word_as_symbol(tok, buffer, 3);
@@ -89,12 +86,12 @@ inline void identify_word_4(struct token_t *tok, struct string *buffer)
     if(!strncmp("else", buffer->str, 4))
     {
         tok->type = TOK_ST_ELSE;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else if(!strncmp("func", buffer->str, 4))
     {
         tok->type = TOK_DEF_FUNC;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else
         identify_word_as_symbol(tok, buffer, 4);
@@ -105,12 +102,12 @@ inline void identify_word_5(struct token_t *tok, struct string *buffer)
     if(!strncmp("while", buffer->str, 5))
     {
         tok->type = TOK_ST_WHILE;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else if(!strncmp("break", buffer->str, 5))
     {
         tok->type = TOK_ST_BREAK;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else
         identify_word_as_symbol(tok, buffer, 5);
@@ -121,7 +118,7 @@ inline void identify_word_6(struct token_t *tok, struct string *buffer)
     if(!strncmp("return", buffer->str, 6))
     {
         tok->type = TOK_ST_RET;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else
         identify_word_as_symbol(tok, buffer, 6);
@@ -137,7 +134,7 @@ inline void identify_word_8(struct token_t *tok, struct string *buffer)
     if(!strncmp("continue", buffer->str, 8))
     {
         tok->type = TOK_ST_CONT;
-        zeroing_unused(tok);
+        token_clear(tok);
     }
     else
         identify_word_as_symbol(tok, buffer, 8);
